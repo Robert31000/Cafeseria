@@ -8,7 +8,6 @@ export default function AuthLayout()
         alt='imagen logotipo'
         className='max-w-xs'
         />
-
         <div className='p-10 w-full'>
             <Outlet/>
         </div>

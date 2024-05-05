@@ -1,24 +1,69 @@
-import { Link } from 'react-router-dom'
-
+import { register, login } from "../service/auth"
+import { useState } from "react"
+import { Link } from "react-router-dom"
 
 export default function Login()
 {
+    const [username, setUsername]= useState('')
+    const [password, setPassword]= useState('')
+
+    const [error, setError]=useState('')
+
+    const validateForm = () => {
+        if (!username.trim()) {
+          setError('Por favor ingresa tu nombre de usuario');
+          return false;
+        }
+        if (!password.trim()) {
+          setError('Por favor ingresa tu contraseña');
+          return false;
+        }
+        return true;
+      };
+    
+      const loginUser = async (e) => {
+        e.preventDefault();
+        if (!validateForm()) {
+          return;
+        }
+        const data = {
+          password: password,
+          username: username
+        };
+        try {
+          const response = await login(data);
+          if (response.ok) {
+            const responseData = await response.json();
+            console.log(responseData.token); // Manejar el token de sesión devuelto por el backend
+          } else {
+            setError('Credenciales incorrectas');
+          }
+        } catch (error) {
+          console.error('Error al iniciar sesión:', error);
+          setError('Error al intentar iniciar sesión');
+        }
+      };
+      
+
     return(
         <>
         <h1 className="text-4xl font-black">Iniciar sesíon</h1>
         <p>Para crear pedido debes iniciar sesíon</p>
 
         <div className="bg-white shadow-md rounded-md mt-10 px-5 py-10">
-            <from>
+            <form onSubmit={loginUser}>
                 <div className="md-4">
                     <label className="text-slate-800"
                     htmlFor="email">
-                        Correo electronico:
+                        nombre de usuario
                     </label>
 
-                    <input type="email"
-                    id="email"
-                    name="email"
+                    <input 
+                      defaultValue={username}
+                      onChange={(evento) => setUsername(evento.currentTarget.value)}
+                    type="text"
+                    id="username"
+                    name="username"
                     placeholder="escribe tu correo"
                     className="mt-2 p-3 w-full bg-gray-50"/>
 
@@ -31,7 +76,10 @@ export default function Login()
                          Contraseña:
                     </label>
 
-                    <input type="password"
+                    <input
+                    defaultValue={password}
+                    onChange={(evento) => setPassword(evento.currentTarget.value)}
+                    type="password"
                     id="password"
                     name="password"
                     placeholder="escribe tu contraseña"
@@ -39,12 +87,15 @@ export default function Login()
 
                     
                 </div>
+
+                {error && <p className="text-white bg-red-600 font-bold text-center mt-2">{error}</p>}
+
                 <input className="bg-indigo-600 hover:bg-indigo-800 text-white w-full mt-5 p-3
                 uppercase font-bold cursor-pointer"
                 type="submit"
                 value="Iniciar sesíon"
                 />
-            </from>
+            </form>
         </div>
         <nav className="mt-5">
             <Link to="/auth/Registro">¿No tienes cuenta? Crea una</Link>
