@@ -4,37 +4,34 @@ import AuthLayout from "./layouts/AuthLayout";
 import Inicio from "./views/Inicio";
 import Login from "./views/Login";
 import Registro from "./views/Registro";
+import PrivateRoute from "./data/PrivateRoute";
 
-const router=createBrowserRouter([
+const router = createBrowserRouter([
     {
-        path:'/',
-        element:<Layout/>,
-        children:[
+        path: '/',
+        element: <Layout />,
+        children: [
             {
-                index:true,
-                element:<Inicio/>
+                index: true,
+                // Utiliza el componente de ruta privada para proteger la página principal
+                element: <PrivateRoute element={<Inicio />} />
             }
         ]
     },
-    
     {
-        path:'/auth',
-        element:<AuthLayout/>,
-        children:[
+        path: '/auth',
+        element: <AuthLayout />,
+        children: [
             {
-                //index: true hace que se muestre en la pantalla principal de nuestro componente AuthLayout
-                path:'/auth/login',
-                element:<Login/>
+                path: '/auth/login',
+                element: <Login />
             },
             {
-                path:'/auth/registro',
-                element:<Registro/>
+                path: '/auth/registro',
+                element: <Registro />
             }
-            
         ]
     }
-    
+]);
 
-])
-
-export default router
+export default router;

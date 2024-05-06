@@ -32,12 +32,11 @@ export function register(data) {
       });
       
 }
-
 export function login(data) {
   /* Suponiendo que `data` contiene el nombre de usuario y la contraseña */
   console.log(data);
 
-  fetch(`${apiUrl}auth/login`, {
+  return fetch(`${apiUrl}auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -46,17 +45,21 @@ export function login(data) {
   })
     .then(response => {
       if (response.ok) {
-        response.json().then(value => {
-          console.log(value.token);
-          // Aquí puedes manejar el token de sesión devuelto por el backend
-        }).catch(error => {
-          console.error('Error al intentar leer');
-        });
+        return response.json();
       } else {
-        console.error('Error al iniciar sesión');
+        throw new Error('Error al iniciar sesión');
       }
+    })
+    .then(data => {
+      const token = data.token;
+      // Almacenar el token en localStorage
+      localStorage.setItem('token', token);
+      console.log('Token almacenado en localStorage:', token);
+      return token;
     })
     .catch(error => {
       console.error('Error de red:', error);
+      throw error;
     });
+
 }

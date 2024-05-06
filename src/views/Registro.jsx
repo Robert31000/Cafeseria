@@ -21,7 +21,7 @@ export default function Registro()
        let isValid = true;
 
 
-if (!name) {
+        if (!name) {
             setNameError('El nombre es obligatorio');
             isValid = false;
         } else {
@@ -59,10 +59,10 @@ if (!name) {
         // Enviar los datos si todas las validaciones pasan
         if (isValid) {
             const data = {
-                nombre: name,
-                password: password,
-                email: email,
-                username: username
+                name,
+                password,
+                email,
+                username
             }
             register(data);
         }

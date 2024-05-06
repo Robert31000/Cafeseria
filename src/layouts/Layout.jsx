@@ -5,6 +5,8 @@ import Sidebar from '../components/Sidebar';
 //OUTLET TE PERMITE QUE SE MUESTRE TU PAGINA DE INICIO AL PRINCIO
 
 export default function Layout() {
+
+  
     return (
         <div className='md:flex'>
             <Sidebar/>

@@ -1,6 +1,9 @@
 import { register, login } from "../service/auth"
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { Link } from "react-router-dom"
+
+
 
 export default function Login()
 {
@@ -8,6 +11,7 @@ export default function Login()
     const [password, setPassword]= useState('')
 
     const [error, setError]=useState('')
+    const navigate = useNavigate();
 
     const validateForm = () => {
         if (!username.trim()) {
@@ -31,18 +35,17 @@ export default function Login()
           username: username
         };
         try {
-          const response = await login(data);
-          if (response.ok) {
-            const responseData = await response.json();
-            console.log(responseData.token); // Manejar el token de sesión devuelto por el backend
-          } else {
-            setError('Credenciales incorrectas');
-          }
+          const token = await login(data);
+          localStorage.setItem("token", token);
+          console.log("Token almacenado en localStorage:", token);
+          // Manejar la redirección u otras acciones después del inicio de sesión exitoso
+          navigate('/'); // Redirigir al usuario a la página principal
         } catch (error) {
-          console.error('Error al iniciar sesión:', error);
-          setError('Error al intentar iniciar sesión');
+          console.error("Error al iniciar sesión:", error);
+          setError("Credenciales incorrectas");
         }
       };
+
       
 
     return(
